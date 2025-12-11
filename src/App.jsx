@@ -12,8 +12,8 @@ const translations = {
       services: "Leistungen",
       about: "Über uns",
       contact: "Kontakt",
-      itcheck: "IT-Check Tool",
-      cta: "Jetzt Anfragen",
+      itcheck: "IT-Check",
+      cta: "Jetzt anfragen",
     },
     intro: {
       logo: "MANAGED4U",
@@ -237,18 +237,15 @@ const translations = {
       imprint: "Impressum",
       privacy: "Datenschutz",
       addressLine1: "managed4u",
-      addressLine2: "Musterstraße 1, 12345 Musterstadt",
+      addressLine2: "Sevilla, Spanien",
       email: "info@managed4u.de",
-      rights: (year) =>
-        `© ${year} managed4u – Alle Rechte vorbehalten.`,
+      rights: (year) => `© ${year} managed4u – Alle Rechte vorbehalten.`,
     },
     floating: {
       label: "Mehr Informationen?",
       phone: "Jetzt anrufen: +49 1522 2907274",
     },
   },
-
-  /* -------------- ENGLISH -------------- */
 
   en: {
     code: "en",
@@ -260,7 +257,7 @@ const translations = {
       about: "About",
       contact: "Contact",
       itcheck: "IT Check",
-      cta: "Request Now",
+      cta: "Request now",
     },
     intro: {
       logo: "MANAGED4U",
@@ -271,8 +268,8 @@ const translations = {
         "🖥️ Managed Services & Support",
         "☁️ Cloud & Microsoft 365",
       ],
-      primary: "Go to Website",
-      secondary: "Start IT Check",
+      primary: "Go to website",
+      secondary: "Start IT check",
       scroll: "Scroll down",
     },
     hero: {
@@ -416,7 +413,7 @@ const translations = {
       },
     ],
     itCheck: {
-      title: "IT Check in 60 seconds",
+      title: "IT check in 60 seconds",
       text:
         "Answer 5 short questions and receive an initial assessment of your IT situation.",
       progress: (step, total) => `Question ${step} of ${total}`,
@@ -470,18 +467,15 @@ const translations = {
       imprint: "Imprint",
       privacy: "Privacy policy",
       addressLine1: "managed4u",
-      addressLine2: "Example Street 1, 12345 Sample City",
+      addressLine2: "Seville, Spain",
       email: "info@managed4u.de",
-      rights: (year) =>
-        `© ${year} managed4u – All rights reserved.`,
+      rights: (year) => `© ${year} managed4u – All rights reserved.`,
     },
     floating: {
       label: "More information?",
       phone: "Call now: +49 1522 2907274",
     },
   },
-
-  /* -------------- SPANISH -------------- */
 
   es: {
     code: "es",
@@ -510,7 +504,8 @@ const translations = {
     },
     hero: {
       pill: "Servicios de TI para empresas",
-      title: "Una nueva forma de pensar la TI. Gestionada. Segura. Flexible.",
+      title:
+        "Una nueva forma de pensar la TI. Gestionada. Segura. Flexible.",
       text:
         "Ofrecemos soluciones de TI a medida, desde la consultoría hasta la operación diaria, para que sus sistemas sean estables, seguros y preparados para el futuro.",
       primary: "Recibir asesoría sin compromiso",
@@ -720,7 +715,7 @@ const translations = {
       imprint: "Aviso legal",
       privacy: "Política de privacidad",
       addressLine1: "managed4u",
-      addressLine2: "Calle Ejemplo 1, 12345 Ciudad de muestra",
+      addressLine2: "Sevilla, España",
       email: "info@managed4u.de",
       rights: (year) =>
         `© ${year} managed4u – Todos los derechos reservados.`,
@@ -744,7 +739,7 @@ const navItems = [
 
 /* ---------------- NAVBAR ---------------- */
 
-function Navbar({ tNav, lang, setLang }) {
+function Navbar({ tNav, lang, setLang, onToggleMenu, isMenuOpen }) {
   return (
     <header className="nav">
       <div className="nav-inner">
@@ -777,6 +772,17 @@ function Navbar({ tNav, lang, setLang }) {
           <a href="#contact" className="nav-cta">
             {tNav.cta}
           </a>
+
+          <button
+            type="button"
+            className="burger"
+            onClick={onToggleMenu}
+            aria-label="Toggle menu"
+          >
+            <div />
+            <div />
+            <div />
+          </button>
         </div>
       </div>
     </header>
@@ -788,7 +794,6 @@ function Navbar({ tNav, lang, setLang }) {
 function Intro({ tIntro, onGo }) {
   return (
     <section id="intro" className="intro">
-      <div className="intro-bg-gradient" />
       <div className="intro-inner hover-zoom">
         <div className="intro-logo">{tIntro.logo}</div>
         <p className="intro-tagline">{tIntro.tagline}</p>
@@ -887,8 +892,6 @@ function AboutShort({ tAbout }) {
 function ServicesSection({ tServicesSection, services }) {
   const [activeService, setActiveService] = useState(null);
 
-  const closeModal = () => setActiveService(null);
-
   return (
     <section id="services" className="section section-light">
       <div className="section-inner">
@@ -916,7 +919,10 @@ function ServicesSection({ tServicesSection, services }) {
       </div>
 
       {activeService && (
-        <div className="modal-backdrop" onClick={closeModal}>
+        <div
+          className="modal-backdrop"
+          onClick={() => setActiveService(null)}
+        >
           <div
             className="modal-card hover-zoom"
             onClick={(e) => e.stopPropagation()}
@@ -924,35 +930,31 @@ function ServicesSection({ tServicesSection, services }) {
             <button
               type="button"
               className="modal-close"
-              onClick={closeModal}
-              aria-label={tServicesSection.modalSecondary}
+              onClick={() => setActiveService(null)}
             >
               ×
             </button>
-
             <h3>{activeService.title}</h3>
             <p className="modal-intro">{activeService.text}</p>
-
             {activeService.details && (
               <ul className="modal-list">
-                {activeService.details.map((item) => (
-                  <li key={item}>{item}</li>
+                {activeService.details.map((d) => (
+                  <li key={d}>{d}</li>
                 ))}
               </ul>
             )}
-
             <div className="modal-actions">
               <a
                 href="#contact"
                 className="modal-primary"
-                onClick={closeModal}
+                onClick={() => setActiveService(null)}
               >
                 {tServicesSection.modalPrimary}
               </a>
               <button
                 type="button"
                 className="modal-secondary"
-                onClick={closeModal}
+                onClick={() => setActiveService(null)}
               >
                 {tServicesSection.modalSecondary}
               </button>
@@ -978,13 +980,10 @@ function ITCheckTool({ tIt }) {
             <>
               <h2>{tIt.title}</h2>
               <p>{tIt.text}</p>
-
               <div className="it-progress">
                 {tIt.progress(step + 1, tIt.questions.length)}
               </div>
-
               <h3 className="it-question">{tIt.questions[step].question}</h3>
-
               <div className="it-answers">
                 {tIt.questions[step].answers.map((a) => (
                   <button
@@ -1012,67 +1011,90 @@ function ITCheckTool({ tIt }) {
   );
 }
 
-/* ---------------- CONTACT ---------------- */
+/* ---------------- CONTACT + MAP ---------------- */
 
 function ContactSection({ tContact, services }) {
   return (
     <section id="contact" className="section section-gray">
-      <div className="section-inner contact-wrapper">
+      <div className="section-inner">
         <h2>{tContact.title}</h2>
         <p className="section-subtitle">{tContact.subtitle}</p>
 
-        <form
-          className="contact-form hover-zoom"
-          onSubmit={(e) => {
-            e.preventDefault();
-            alert(tContact.success);
-          }}
-        >
-          <div className="contact-row">
+        <div className="contact-layout">
+          <form
+            className="contact-form hover-zoom"
+            onSubmit={(e) => {
+              e.preventDefault();
+              alert(tContact.success);
+            }}
+          >
+            <div className="contact-row">
+              <div className="field">
+                <label>{tContact.name}</label>
+                <input required />
+              </div>
+              <div className="field">
+                <label>{tContact.company}</label>
+                <input />
+              </div>
+            </div>
+
+            <div className="contact-row">
+              <div className="field">
+                <label>{tContact.phone}</label>
+                <input />
+              </div>
+              <div className="field">
+                <label>{tContact.email}</label>
+                <input type="email" required />
+              </div>
+            </div>
+
             <div className="field">
-              <label>{tContact.name}</label>
-              <input required />
+              <label>{tContact.interests}</label>
+              <div className="checkbox-grid">
+                {services.map((s) => (
+                  <label key={s.title} className="checkbox-item">
+                    <input type="checkbox" /> {s.title}
+                  </label>
+                ))}
+              </div>
             </div>
+
             <div className="field">
-              <label>{tContact.company}</label>
-              <input />
+              <label>{tContact.messageLabel}</label>
+              <textarea rows="4" />
+            </div>
+
+            <div className="field checkbox-item">
+              <input type="checkbox" required />
+              <span>{tContact.consent}</span>
+            </div>
+
+            <button className="hero-cta contact-submit">
+              {tContact.submit}
+            </button>
+          </form>
+
+          <div className="map-card hover-zoom">
+            <h3>Sevilla · Spanien</h3>
+            <p className="map-subtext">
+              Standort unserer IT-Dienstleistungen in Spanien.
+            </p>
+            <div id="map-container">
+              <iframe
+                title="Sevilla, Spain"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6376.584654001384!2d-5.9973367!3d37.3890924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126c1103fe7a8f%3A0x402af51b4664250!2sSeville%2C%20Spain!5e0!3m2!1sen!2sde!4v1700000000000"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
-
-          <div className="contact-row">
-            <div className="field">
-              <label>{tContact.phone}</label>
-              <input />
-            </div>
-            <div className="field">
-              <label>{tContact.email}</label>
-              <input type="email" required />
-            </div>
-          </div>
-
-          <div className="field">
-            <label>{tContact.interests}</label>
-            <div className="checkbox-grid">
-              {services.map((s) => (
-                <label key={s.title} className="checkbox-item">
-                  <input type="checkbox" /> {s.title}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <label>{tContact.messageLabel}</label>
-            <textarea rows="4" />
-          </div>
-
-          <div className="field checkbox-item">
-            <input type="checkbox" required />
-            <span>{tContact.consent}</span>
-          </div>
-
-          <button className="hero-cta contact-submit">{tContact.submit}</button>
-        </form>
+        </div>
       </div>
     </section>
   );
@@ -1089,7 +1111,6 @@ function Footer({ tFooter }) {
           <div className="footer-logo">managed4u</div>
           <p>{tFooter.about}</p>
         </div>
-
         <div className="footer-col">
           <h4>{tFooter.nav}</h4>
           <a href="#hero">Start</a>
@@ -1097,13 +1118,11 @@ function Footer({ tFooter }) {
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
-
         <div className="footer-col">
           <h4>{tFooter.legal}</h4>
           <a href="#!">{tFooter.imprint}</a>
           <a href="#!">{tFooter.privacy}</a>
         </div>
-
         <div className="footer-col">
           <h4>{tFooter.contact}</h4>
           <p>{tFooter.addressLine1}</p>
@@ -1111,7 +1130,6 @@ function Footer({ tFooter }) {
           <p>{tFooter.email}</p>
         </div>
       </div>
-
       <div className="footer-bottom">{tFooter.rights(year)}</div>
     </footer>
   );
@@ -1123,7 +1141,7 @@ function FloatingContact({ floating }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handler = () => {
       const y =
         window.scrollY ||
         document.documentElement.scrollTop ||
@@ -1131,10 +1149,9 @@ function FloatingContact({ floating }) {
         0;
       setVisible(y > 200);
     };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    handler();
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
   return (
@@ -1150,11 +1167,57 @@ function FloatingContact({ floating }) {
   );
 }
 
+/* ---------------- MOBILE MENU OVERLAY ---------------- */
+
+function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
+  return (
+    <>
+      <div className={`mobile-menu ${isOpen ? "open" : ""}`}>
+        <div className="mobile-menu-header">
+          <span className="mobile-brand">{tNav.brand}</span>
+          <button className="mobile-close" onClick={onClose}>
+            ×
+          </button>
+        </div>
+
+        <div className="mobile-lang">
+          {["de", "en", "es"].map((code) => (
+            <button
+              key={code}
+              type="button"
+              className={`lang-btn ${
+                lang === code ? "lang-btn-active" : ""
+              }`}
+              onClick={() => setLang(code)}
+            >
+              {translations[code].label}
+            </button>
+          ))}
+        </div>
+
+        <nav className="mobile-menu-links">
+          {navItems.map((item) => (
+            <a
+              key={item.key}
+              href={item.href}
+              onClick={onClose}
+            >
+              {tNav[item.key]}
+            </a>
+          ))}
+        </nav>
+      </div>
+      {isOpen && <div className="mobile-backdrop" onClick={onClose} />}
+    </>
+  );
+}
+
 /* ---------------- MAIN APP ---------------- */
 
 export default function App() {
   const [lang, setLang] = useState("de");
   const [showIntro, setShowIntro] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -1163,7 +1226,7 @@ export default function App() {
     setTimeout(() => {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 50);
+    }, 80);
   };
 
   useEffect(() => {
@@ -1177,7 +1240,21 @@ export default function App() {
 
   return (
     <>
-      <Navbar tNav={t.nav} lang={lang} setLang={setLang} />
+      <Navbar
+        tNav={t.nav}
+        lang={lang}
+        setLang={setLang}
+        onToggleMenu={() => setMobileMenuOpen((v) => !v)}
+        isMenuOpen={mobileMenuOpen}
+      />
+
+      <MobileMenu
+        tNav={t.nav}
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        setLang={setLang}
+        lang={lang}
+      />
 
       {showIntro ? (
         <Intro tIntro={t.intro} onGo={goToSection} />
