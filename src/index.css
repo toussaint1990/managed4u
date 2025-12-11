@@ -571,10 +571,6 @@ a {
 
 /* CONTACT + MAP */
 
-.contact-wrapper {
-  max-width: 900px;
-}
-
 .contact-layout {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1.7fr);
@@ -720,8 +716,25 @@ a {
   border-top: 1px solid #1f2937;
   text-align: center;
   font-size: 0.85rem;
-  padding: 0.9rem 1rem;
-  color: #6b7280;
+  padding: 0.9rem 1rem 1.4rem;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+}
+
+.footer-rights {
+  opacity: 0.9;
+}
+
+.footer-credit {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.footer-credit strong {
+  color: #ffffff;
 }
 
 /* MODAL */

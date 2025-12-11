@@ -739,7 +739,7 @@ const navItems = [
 
 /* ---------------- NAVBAR ---------------- */
 
-function Navbar({ tNav, lang, setLang, onToggleMenu, isMenuOpen }) {
+function Navbar({ tNav, lang, setLang, onToggleMenu }) {
   return (
     <header className="nav">
       <div className="nav-inner">
@@ -1130,7 +1130,12 @@ function Footer({ tFooter }) {
           <p>{tFooter.email}</p>
         </div>
       </div>
-      <div className="footer-bottom">{tFooter.rights(year)}</div>
+      <div className="footer-bottom">
+        <span className="footer-rights">{tFooter.rights(year)}</span>
+        <span className="footer-credit">
+          Website development: <strong>Cristian Daniel Toussaint</strong>
+        </span>
+      </div>
     </footer>
   );
 }
@@ -1167,7 +1172,7 @@ function FloatingContact({ floating }) {
   );
 }
 
-/* ---------------- MOBILE MENU OVERLAY ---------------- */
+/* ---------------- MOBILE MENU ---------------- */
 
 function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
   return (
@@ -1197,11 +1202,7 @@ function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
 
         <nav className="mobile-menu-links">
           {navItems.map((item) => (
-            <a
-              key={item.key}
-              href={item.href}
-              onClick={onClose}
-            >
+            <a key={item.key} href={item.href} onClick={onClose}>
               {tNav[item.key]}
             </a>
           ))}
@@ -1245,7 +1246,6 @@ export default function App() {
         lang={lang}
         setLang={setLang}
         onToggleMenu={() => setMobileMenuOpen((v) => !v)}
-        isMenuOpen={mobileMenuOpen}
       />
 
       <MobileMenu
