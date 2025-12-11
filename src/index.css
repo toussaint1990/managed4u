@@ -21,7 +21,11 @@ body,
 }
 
 body {
-  background-color: #fffbe6; /* light yellow */
+  /* SILVER background (replaces light yellow) */
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(16, 185, 129, 0.08), transparent 60%),
+    radial-gradient(1000px 600px at 85% 0%, rgba(16, 185, 129, 0.06), transparent 60%),
+    linear-gradient(180deg, #eef1f4, #e6ebf1);
 }
 
 a {
@@ -347,15 +351,18 @@ a {
 
 .section {
   padding: 3.5rem 1.5rem;
-  background: #fffbe6;
+  /* SILVER section base (replaces yellow) */
+  background: transparent;
 }
 
 .section-light {
-  background: #fffbe6;
+  /* SILVER section (replaces yellow) */
+  background: transparent;
 }
 
 .section-gray {
-  background: #fff6cc;
+  /* Slightly deeper silver band (replaces darker yellow band) */
+  background: rgba(15, 23, 42, 0.03);
 }
 
 .section-inner {
