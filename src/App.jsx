@@ -1,10 +1,381 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import logo from "./assets/logo.jpeg";
+
+/* ---------------- SERVICES DATA (defined FIRST to avoid TDZ error) ---------------- */
+
+const servicesDe = [
+  {
+    icon: "🛠️",
+    title: "IT-Beratung & Support",
+    text: "Kompetente Beratung und schneller Support für Ihre IT-Infrastruktur.",
+    details: [
+      "Analyse Ihrer aktuellen IT-Landschaft",
+      "Empfehlungen für Performance, Sicherheit und Kostenoptimierung",
+      "Remote- und Vor-Ort-Support nach Bedarf",
+    ],
+  },
+  {
+    icon: "🌐",
+    title: "Netzwerktechnik & Standortvernetzung",
+    text: "Planung, Implementierung und Wartung sicherer Unternehmensnetzwerke.",
+    details: [
+      "Planung und Aufbau sicherer LAN- und WLAN-Strukturen",
+      "Vernetzung mehrerer Standorte (VPN/MPLS)",
+      "Monitoring und Fehleranalyse im Netzwerk",
+    ],
+  },
+  {
+    icon: "💻",
+    title: "Webdesign & Hosting",
+    text: "Moderne Webseiten und zuverlässiges Hosting für Ihren Online-Auftritt.",
+    details: [
+      "Responsives Design für alle Endgeräte",
+      "Optimierung für Ladezeiten und Suchmaschinen",
+      "Sicheres Hosting inklusive SSL & Backups",
+    ],
+  },
+  {
+    icon: "☁️",
+    title: "Cloud-Dienste (inkl. Private Cloud)",
+    text: "Flexible und sichere Cloud-Lösungen für Daten und Anwendungen.",
+    details: [
+      "Beratung zu Public-, Private- und Hybrid-Cloud",
+      "Migration von Servern und Anwendungen in die Cloud",
+      "Sichere Speicherung und verschlüsselte Datenübertragung",
+    ],
+  },
+  {
+    icon: "✉️",
+    title: "Microsoft 365 & E-Mail-Security",
+    text: "Optimale Nutzung von M365 und Schutz vor E-Mail-Bedrohungen.",
+    details: [
+      "Einrichtung und Verwaltung Ihrer Microsoft 365 Umgebung",
+      "Schutz vor Spam, Phishing und Schadsoftware",
+      "Schulung Ihrer Mitarbeitenden für sicheres E-Mail-Verhalten",
+    ],
+  },
+  {
+    icon: "🧩",
+    title: "Managed Services",
+    text: "Proaktive Verwaltung und Überwachung Ihrer gesamten IT-Landschaft.",
+    details: [
+      "24/7-Monitoring von Servern, Clients und Netzwerk",
+      "Regelmäßige Wartung und Patch-Management",
+      "Transparente Reports zu Verfügbarkeit und Stabilität",
+    ],
+  },
+  {
+    icon: "🔐",
+    title: "IT-Sicherheitscheck & Schutz",
+    text: "Analyse von Schwachstellen und Implementierung von Schutzmaßnahmen.",
+    details: [
+      "Sicherheitsaudits und Penetrationstests",
+      "Empfehlungen zu Firewall-, Endpoint- und Backup-Konzepten",
+      "Umsetzung technischer und organisatorischer Maßnahmen",
+    ],
+  },
+  {
+    icon: "⬆️",
+    title: "Softwareinstallation & Updateservices",
+    text: "Professionelle Installation und regelmäßige Updates Ihrer Software.",
+    details: [
+      "Standardisierte Rollouts neuer Software",
+      "Planung und Durchführung von Updates & Upgrades",
+      "Dokumentation und Rückfallstrategien (Rollback)",
+    ],
+  },
+  {
+    icon: "📱",
+    title: "Mobile Device Management (MDM)",
+    text: "Sichere Verwaltung Ihrer mobilen Endgeräte im Unternehmen.",
+    details: [
+      "Zentrale Verwaltung von Smartphones, Tablets und Laptops",
+      "Durchsetzung von Sicherheitsrichtlinien (PIN, Verschlüsselung)",
+      "Remote-Wipe bei Verlust oder Diebstahl",
+    ],
+  },
+  {
+    icon: "🏠",
+    title: "Homeoffice-Lösungen",
+    text: "Effiziente und sichere Ausstattung für Remote-Arbeitsplätze.",
+    details: [
+      "VPN- und Remote-Desktop-Lösungen",
+      "Integration von Collaboration-Tools (Teams, Zoom usw.)",
+      "Sicherheitskonzepte für das Arbeiten von zu Hause",
+    ],
+  },
+  {
+    icon: "📦",
+    title: "IT-Miete & Modernisierung",
+    text: "Flexible Hardware-Miete und strategische Modernisierung.",
+    details: [
+      "Planung von Hardware-Erneuerungen und Lifecycle-Management",
+      "Mietmodelle für Server, Clients und Netzwerk-Komponenten",
+      "Transparente Kostenmodelle statt hoher Einmalinvestitionen",
+    ],
+  },
+  {
+    icon: "📞",
+    title: "Telekommunikation (z. B. VoIP)",
+    text: "Moderne Kommunikationslösungen für Ihr Unternehmen.",
+    details: [
+      "Einrichtung moderner VoIP-Telefonanlagen",
+      "Vernetzung von Standorten und mobilen Mitarbeitenden",
+      "Integration in CRM- und Ticketsysteme",
+    ],
+  },
+];
+
+const servicesEn = [
+  {
+    icon: "🛠️",
+    title: "IT Consulting & Support",
+    text: "Expert consulting and fast support for your IT infrastructure.",
+    details: [
+      "Analysis of your current IT landscape",
+      "Recommendations for performance, security and cost optimization",
+      "Remote and on-site support as needed",
+    ],
+  },
+  {
+    icon: "🌐",
+    title: "Network Technology & Site Connectivity",
+    text: "Planning, implementation and maintenance of secure business networks.",
+    details: [
+      "Design and setup of secure LAN and Wi-Fi",
+      "Connecting multiple locations (VPN/MPLS)",
+      "Monitoring and troubleshooting",
+    ],
+  },
+  {
+    icon: "💻",
+    title: "Web Design & Hosting",
+    text: "Modern websites and reliable hosting for your online presence.",
+    details: [
+      "Responsive design for all devices",
+      "Optimization for speed and SEO",
+      "Secure hosting incl. SSL and backups",
+    ],
+  },
+  {
+    icon: "☁️",
+    title: "Cloud Services (incl. Private Cloud)",
+    text: "Flexible and secure cloud solutions for data and applications.",
+    details: [
+      "Consulting for public, private and hybrid cloud",
+      "Migration of servers and applications to the cloud",
+      "Secure storage and encrypted transfer",
+    ],
+  },
+  {
+    icon: "✉️",
+    title: "Microsoft 365 & Email Security",
+    text: "Best use of M365 and protection against email threats.",
+    details: [
+      "Setup and administration of Microsoft 365",
+      "Protection against spam, phishing and malware",
+      "User awareness training for safe email usage",
+    ],
+  },
+  {
+    icon: "🧩",
+    title: "Managed Services",
+    text: "Proactive management and monitoring of your entire IT environment.",
+    details: [
+      "24/7 monitoring of servers, endpoints and network",
+      "Regular maintenance and patch management",
+      "Transparent reports on availability and stability",
+    ],
+  },
+  {
+    icon: "🔐",
+    title: "IT Security Check & Protection",
+    text: "Identify vulnerabilities and implement protection measures.",
+    details: [
+      "Security audits and penetration testing",
+      "Firewall, endpoint and backup recommendations",
+      "Implementation of technical and organizational measures",
+    ],
+  },
+  {
+    icon: "⬆️",
+    title: "Software Installation & Updates",
+    text: "Professional installations and regular software updates.",
+    details: [
+      "Standardized software rollouts",
+      "Planning and execution of updates & upgrades",
+      "Documentation and rollback strategies",
+    ],
+  },
+  {
+    icon: "📱",
+    title: "Mobile Device Management (MDM)",
+    text: "Secure management of mobile devices in your company.",
+    details: [
+      "Central management of smartphones, tablets and laptops",
+      "Enforcing security policies (PIN, encryption)",
+      "Remote wipe in case of loss or theft",
+    ],
+  },
+  {
+    icon: "🏠",
+    title: "Home Office Solutions",
+    text: "Efficient and secure setups for remote workplaces.",
+    details: [
+      "VPN and remote desktop solutions",
+      "Integration of collaboration tools (Teams, Zoom, etc.)",
+      "Security concepts for working from home",
+    ],
+  },
+  {
+    icon: "📦",
+    title: "IT Leasing & Modernization",
+    text: "Flexible hardware leasing and strategic modernization.",
+    details: [
+      "Planning hardware renewals and lifecycle management",
+      "Leasing models for servers, clients and network gear",
+      "Transparent cost models instead of large one-time investments",
+    ],
+  },
+  {
+    icon: "📞",
+    title: "Telecommunications (e.g. VoIP)",
+    text: "Modern communication solutions for your business.",
+    details: [
+      "Setup of modern VoIP phone systems",
+      "Connecting locations and mobile workers",
+      "Integration into CRM and ticketing systems",
+    ],
+  },
+];
+
+const servicesEs = [
+  {
+    icon: "🛠️",
+    title: "Consultoría y soporte IT",
+    text: "Asesoría experta y soporte rápido para su infraestructura de TI.",
+    details: [
+      "Análisis de su entorno IT actual",
+      "Recomendaciones sobre rendimiento, seguridad y costes",
+      "Soporte remoto y presencial según necesidad",
+    ],
+  },
+  {
+    icon: "🌐",
+    title: "Redes y conexión entre sedes",
+    text: "Planificación, implantación y mantenimiento de redes seguras.",
+    details: [
+      "Diseño e instalación de LAN y Wi-Fi seguros",
+      "Conexión de varias sedes (VPN/MPLS)",
+      "Monitorización y resolución de incidencias",
+    ],
+  },
+  {
+    icon: "💻",
+    title: "Diseño web y hosting",
+    text: "Sitios web modernos y hosting fiable para su presencia online.",
+    details: [
+      "Diseño responsive para todos los dispositivos",
+      "Optimización para velocidad y SEO",
+      "Hosting seguro con SSL y copias de seguridad",
+    ],
+  },
+  {
+    icon: "☁️",
+    title: "Servicios en la nube (incl. nube privada)",
+    text: "Soluciones cloud flexibles y seguras para datos y aplicaciones.",
+    details: [
+      "Asesoría sobre cloud pública, privada e híbrida",
+      "Migración de servidores y aplicaciones",
+      "Almacenamiento seguro y transferencia cifrada",
+    ],
+  },
+  {
+    icon: "✉️",
+    title: "Microsoft 365 y seguridad de correo",
+    text: "Uso óptimo de M365 y protección frente a amenazas por email.",
+    details: [
+      "Configuración y gestión de Microsoft 365",
+      "Protección frente a spam, phishing y malware",
+      "Formación de usuarios en uso seguro del correo",
+    ],
+  },
+  {
+    icon: "🧩",
+    title: "Servicios gestionados",
+    text: "Gestión y monitorización proactiva de todo su entorno IT.",
+    details: [
+      "Monitorización 24/7 de servidores, equipos y redes",
+      "Mantenimiento regular y gestión de parches",
+      "Informes transparentes de disponibilidad y estabilidad",
+    ],
+  },
+  {
+    icon: "🔐",
+    title: "Chequeo de seguridad IT y protección",
+    text: "Análisis de vulnerabilidades e implantación de medidas de protección.",
+    details: [
+      "Auditorías de seguridad y pruebas de penetración",
+      "Recomendaciones de firewall, endpoint y backups",
+      "Aplicación de medidas técnicas y organizativas",
+    ],
+  },
+  {
+    icon: "⬆️",
+    title: "Instalación de software y actualizaciones",
+    text: "Instalación profesional y actualizaciones regulares de su software.",
+    details: [
+      "Despliegues estandarizados de software",
+      "Planificación y ejecución de actualizaciones y upgrades",
+      "Documentación y estrategias de rollback",
+    ],
+  },
+  {
+    icon: "📱",
+    title: "Gestión de dispositivos móviles (MDM)",
+    text: "Gestión segura de dispositivos móviles en su empresa.",
+    details: [
+      "Gestión centralizada de smartphones, tablets y portátiles",
+      "Aplicación de políticas de seguridad (PIN, cifrado)",
+      "Borrado remoto en caso de pérdida o robo",
+    ],
+  },
+  {
+    icon: "🏠",
+    title: "Soluciones para teletrabajo",
+    text: "Equipamiento eficiente y seguro para puestos de trabajo remotos.",
+    details: [
+      "Soluciones VPN y escritorio remoto",
+      "Integración de herramientas de colaboración (Teams, Zoom, etc.)",
+      "Conceptos de seguridad para trabajar desde casa",
+    ],
+  },
+  {
+    icon: "📦",
+    title: "Alquiler y modernización de IT",
+    text: "Alquiler flexible de hardware y modernización estratégica.",
+    details: [
+      "Planificación de renovaciones de hardware y ciclo de vida",
+      "Modelos de alquiler para servidores, equipos y red",
+      "Costes transparentes sin grandes inversiones únicas",
+    ],
+  },
+  {
+    icon: "📞",
+    title: "Telecomunicaciones (p. ej. VoIP)",
+    text: "Soluciones de comunicación modernas para su empresa.",
+    details: [
+      "Configuración de centrales telefónicas VoIP",
+      "Conexión de sedes y trabajadores móviles",
+      "Integración con CRM y sistemas de tickets",
+    ],
+  },
+];
 
 /* ---------------- TRANSLATIONS ---------------- */
 
 const translations = {
   de: {
-    code: "de",
     label: "DE",
     nav: {
       brand: "managed4u",
@@ -16,7 +387,6 @@ const translations = {
       cta: "Jetzt anfragen",
     },
     intro: {
-      logo: "MANAGED4U",
       tagline:
         "Moderne IT-Dienstleistungen für Unternehmen – managed, sicher und flexibel.",
       badges: [
@@ -58,126 +428,7 @@ const translations = {
       modalPrimary: "Jetzt anfragen",
       modalSecondary: "Schließen",
     },
-    services: [
-      {
-        title: "IT-Beratung & Support",
-        text:
-          "Kompetente Beratung und schneller Support für Ihre IT-Infrastruktur.",
-        details: [
-          "Analyse Ihrer aktuellen IT-Landschaft",
-          "Empfehlungen für Performance, Sicherheit und Kostenoptimierung",
-          "Remote- und Vor-Ort-Support nach Bedarf",
-        ],
-      },
-      {
-        title: "Netzwerktechnik & Standortvernetzung",
-        text:
-          "Planung, Implementierung und Wartung sicherer Unternehmensnetzwerke.",
-        details: [
-          "Planung und Aufbau sicherer LAN- und WLAN-Strukturen",
-          "Vernetzung mehrerer Standorte (VPN/MPLS)",
-          "Monitoring und Fehleranalyse im Netzwerk",
-        ],
-      },
-      {
-        title: "Webdesign & Hosting",
-        text:
-          "Moderne Webseiten und zuverlässiges Hosting für Ihren Online-Auftritt.",
-        details: [
-          "Responsives Design für alle Endgeräte",
-          "Optimierung für Ladezeiten und Suchmaschinen",
-          "Sicheres Hosting inklusive SSL & Backups",
-        ],
-      },
-      {
-        title: "Cloud-Dienste (inkl. Private Cloud)",
-        text: "Flexible und sichere Cloud-Lösungen für Daten und Anwendungen.",
-        details: [
-          "Beratung zu Public-, Private- und Hybrid-Cloud",
-          "Migration von Servern und Anwendungen in die Cloud",
-          "Sichere Speicherung und verschlüsselte Datenübertragung",
-        ],
-      },
-      {
-        title: "Microsoft 365 & E-Mail-Security",
-        text:
-          "Optimale Nutzung von M365 und Schutz vor E-Mail-Bedrohungen.",
-        details: [
-          "Einrichtung und Verwaltung Ihrer Microsoft 365 Umgebung",
-          "Schutz vor Spam, Phishing und Schadsoftware",
-          "Schulung Ihrer Mitarbeitenden für sicheres E-Mail-Verhalten",
-        ],
-      },
-      {
-        title: "Managed Services",
-        text:
-          "Proaktive Verwaltung und Überwachung Ihrer gesamten IT-Landschaft.",
-        details: [
-          "24/7-Monitoring von Servern, Clients und Netzwerk",
-          "Regelmäßige Wartung und Patch-Management",
-          "Transparente Reports zu Verfügbarkeit und Stabilität",
-        ],
-      },
-      {
-        title: "IT-Sicherheitscheck & Schutz",
-        text:
-          "Analyse von Schwachstellen und Implementierung von Schutzmaßnahmen.",
-        details: [
-          "Sicherheitsaudits und Penetrationstests",
-          "Empfehlungen zu Firewall-, Endpoint- und Backup-Konzepten",
-          "Umsetzung technischer und organisatorischer Maßnahmen",
-        ],
-      },
-      {
-        title: "Softwareinstallation & Updateservices",
-        text:
-          "Professionelle Installation und regelmäßige Updates Ihrer Software.",
-        details: [
-          "Standardisierte Rollouts neuer Software",
-          "Planung und Durchführung von Updates & Upgrades",
-          "Dokumentation und Rückfallstrategien (Rollback)",
-        ],
-      },
-      {
-        title: "Mobile Device Management (MDM)",
-        text: "Sichere Verwaltung Ihrer mobilen Endgeräte im Unternehmen.",
-        details: [
-          "Zentrale Verwaltung von Smartphones, Tablets und Laptops",
-          "Durchsetzung von Sicherheitsrichtlinien (PIN, Verschlüsselung)",
-          "Remote-Wipe bei Verlust oder Diebstahl",
-        ],
-      },
-      {
-        title: "Homeoffice-Lösungen",
-        text:
-          "Effiziente und sichere Ausstattung für Remote-Arbeitsplätze.",
-        details: [
-          "VPN- und Remote-Desktop-Lösungen",
-          "Integration von Collaboration-Tools (Teams, Zoom usw.)",
-          "Sicherheitskonzepte für das Arbeiten von zu Hause",
-        ],
-      },
-      {
-        title: "IT-Miete & Modernisierung",
-        text:
-          "Flexible Hardware-Miete und strategische Modernisierung.",
-        details: [
-          "Planung von Hardware-Erneuerungen und Lifecycle-Management",
-          "Mietmodelle für Server, Clients und Netzwerk-Komponenten",
-          "Transparente Kostenmodelle statt hoher Einmalinvestitionen",
-        ],
-      },
-      {
-        title: "Telekommunikation (z. B. VoIP)",
-        text:
-          "Moderne Kommunikationslösungen für Ihr Unternehmen.",
-        details: [
-          "Einrichtung moderner VoIP-Telefonanlagen",
-          "Vernetzung von Standorten und mobilen Mitarbeitenden",
-          "Integration in CRM- und Ticketsysteme",
-        ],
-      },
-    ],
+    services: servicesDe,
     itCheck: {
       title: "IT-Check in 60 Sekunden",
       text:
@@ -248,7 +499,6 @@ const translations = {
   },
 
   en: {
-    code: "en",
     label: "EN",
     nav: {
       brand: "managed4u",
@@ -260,7 +510,6 @@ const translations = {
       cta: "Request now",
     },
     intro: {
-      logo: "MANAGED4U",
       tagline:
         "Modern IT services for businesses – managed, secure and flexible.",
       badges: [
@@ -291,7 +540,7 @@ const translations = {
       ],
       cardTitle: "Why managed4u?",
       cardText:
-        "Short response times, transparent communication and a team that truly understands your IT.",
+        "Fast response times, transparent communication and a team that truly understands your IT.",
       highlight: "98% client satisfaction · 15+ years of experience",
     },
     servicesSection: {
@@ -302,116 +551,7 @@ const translations = {
       modalPrimary: "Request now",
       modalSecondary: "Close",
     },
-    services: [
-      {
-        title: "IT Consulting & Support",
-        text: "Expert consulting and fast support for your IT infrastructure.",
-        details: [
-          "Analysis of your current IT landscape",
-          "Recommendations for performance, security and costs",
-          "Remote and on-site support as needed",
-        ],
-      },
-      {
-        title: "Network Technology & Site Connectivity",
-        text: "Planning, implementation and maintenance of secure networks.",
-        details: [
-          "Planning and setup of secure LAN and Wi-Fi",
-          "Connecting multiple locations (VPN/MPLS)",
-          "Monitoring and troubleshooting",
-        ],
-      },
-      {
-        title: "Web Design & Hosting",
-        text: "Modern websites and reliable hosting for your online presence.",
-        details: [
-          "Responsive design for all devices",
-          "Optimization for speed and SEO",
-          "Secure hosting incl. SSL and backups",
-        ],
-      },
-      {
-        title: "Cloud Services (incl. Private Cloud)",
-        text: "Flexible and secure cloud solutions for data and applications.",
-        details: [
-          "Consulting on public, private and hybrid cloud",
-          "Migration of servers and applications",
-          "Secure storage and encrypted transfer",
-        ],
-      },
-      {
-        title: "Microsoft 365 & E-mail Security",
-        text: "Best use of M365 and protection against email threats.",
-        details: [
-          "Setup and management of Microsoft 365",
-          "Protection from spam, phishing and malware",
-          "User training for secure email usage",
-        ],
-      },
-      {
-        title: "Managed Services",
-        text: "Proactive management and monitoring of your entire IT.",
-        details: [
-          "24/7 monitoring of servers, clients and networks",
-          "Regular maintenance and patch management",
-          "Transparent reporting on availability and stability",
-        ],
-      },
-      {
-        title: "IT Security Check & Protection",
-        text: "Identify vulnerabilities and implement protection measures.",
-        details: [
-          "Security audits and penetration tests",
-          "Firewall, endpoint and backup concepts",
-          "Implementation of technical and organisational measures",
-        ],
-      },
-      {
-        title: "Software Installation & Updates",
-        text: "Professional installation and regular updates of your software.",
-        details: [
-          "Standardised software rollouts",
-          "Planning and execution of updates and upgrades",
-          "Documentation and rollback strategies",
-        ],
-      },
-      {
-        title: "Mobile Device Management (MDM)",
-        text: "Secure management of mobile devices in your company.",
-        details: [
-          "Central management of smartphones, tablets and laptops",
-          "Enforcing security policies (PIN, encryption)",
-          "Remote wipe in case of loss or theft",
-        ],
-      },
-      {
-        title: "Home Office Solutions",
-        text: "Efficient and secure setups for remote workplaces.",
-        details: [
-          "VPN and remote desktop solutions",
-          "Integration of collaboration tools (Teams, Zoom, etc.)",
-          "Security concepts for working from home",
-        ],
-      },
-      {
-        title: "IT Leasing & Modernization",
-        text: "Flexible hardware leasing and strategic modernization.",
-        details: [
-          "Planning hardware renewals and lifecycle management",
-          "Leasing models for servers, clients and network gear",
-          "Transparent cost models instead of big one-time spendings",
-        ],
-      },
-      {
-        title: "Telecommunications (e.g. VoIP)",
-        text: "Modern communication solutions for your business.",
-        details: [
-          "Setup of modern VoIP phone systems",
-          "Connecting locations and mobile workers",
-          "Integration into CRM and ticket systems",
-        ],
-      },
-    ],
+    services: servicesEn,
     itCheck: {
       title: "IT check in 60 seconds",
       text:
@@ -459,8 +599,7 @@ const translations = {
       success: "Message sent! (Demo)",
     },
     footer: {
-      about:
-        "IT services for businesses – secure, flexible, efficient.",
+      about: "IT services for businesses – secure, flexible, efficient.",
       nav: "Navigation",
       legal: "Legal",
       contact: "Contact",
@@ -478,7 +617,6 @@ const translations = {
   },
 
   es: {
-    code: "es",
     label: "ES",
     nav: {
       brand: "managed4u",
@@ -490,7 +628,6 @@ const translations = {
       cta: "Solicitar ahora",
     },
     intro: {
-      logo: "MANAGED4U",
       tagline:
         "Servicios de TI modernos para empresas: gestionados, seguros y flexibles.",
       badges: [
@@ -504,8 +641,7 @@ const translations = {
     },
     hero: {
       pill: "Servicios de TI para empresas",
-      title:
-        "Una nueva forma de pensar la TI. Gestionada. Segura. Flexible.",
+      title: "Una nueva forma de pensar la TI. Gestionada. Segura. Flexible.",
       text:
         "Ofrecemos soluciones de TI a medida, desde la consultoría hasta la operación diaria, para que sus sistemas sean estables, seguros y preparados para el futuro.",
       primary: "Recibir asesoría sin compromiso",
@@ -522,9 +658,8 @@ const translations = {
       ],
       cardTitle: "¿Por qué managed4u?",
       cardText:
-        "Tiempos de respuesta cortos, comunicación transparente y un equipo que realmente entiende su TI.",
-      highlight:
-        "98% de satisfacción de clientes · más de 15 años de experiencia",
+        "Respuesta rápida, comunicación transparente y un equipo que entiende su TI.",
+      highlight: "98% de satisfacción · más de 15 años de experiencia",
     },
     servicesSection: {
       title: "Servicios de TI",
@@ -534,128 +669,7 @@ const translations = {
       modalPrimary: "Solicitar ahora",
       modalSecondary: "Cerrar",
     },
-    services: [
-      {
-        title: "Consultoría y soporte IT",
-        text:
-          "Asesoría experta y soporte rápido para su infraestructura de TI.",
-        details: [
-          "Análisis de su entorno IT actual",
-          "Recomendaciones sobre rendimiento, seguridad y costes",
-          "Soporte remoto y presencial según necesidad",
-        ],
-      },
-      {
-        title: "Redes y conexión entre sedes",
-        text:
-          "Planificación, implantación y mantenimiento de redes seguras.",
-        details: [
-          "Diseño e instalación de LAN y Wi-Fi seguros",
-          "Conexión de varias sedes (VPN/MPLS)",
-          "Monitorización y resolución de incidencias",
-        ],
-      },
-      {
-        title: "Diseño web y hosting",
-        text:
-          "Sitios web modernos y hosting fiable para su presencia online.",
-        details: [
-          "Diseño responsive para todos los dispositivos",
-          "Optimización para tiempos de carga y SEO",
-          "Hosting seguro con SSL y copias de seguridad",
-        ],
-      },
-      {
-        title: "Servicios en la nube (incl. nube privada)",
-        text:
-          "Soluciones cloud flexibles y seguras para datos y aplicaciones.",
-        details: [
-          "Asesoría sobre cloud pública, privada e híbrida",
-          "Migración de servidores y aplicaciones",
-          "Almacenamiento seguro y transferencia cifrada",
-        ],
-      },
-      {
-        title: "Microsoft 365 y seguridad de correo",
-        text:
-          "Uso óptimo de M365 y protección frente a amenazas por e-mail.",
-        details: [
-          "Configuración y gestión de Microsoft 365",
-          "Protección frente a spam, phishing y malware",
-          "Formación de usuarios en uso seguro del correo",
-        ],
-      },
-      {
-        title: "Servicios gestionados",
-        text:
-          "Gestión y monitorización proactiva de todo su entorno IT.",
-        details: [
-          "Monitorización 24/7 de servidores, equipos y redes",
-          "Mantenimiento regular y gestión de parches",
-          "Informes transparentes sobre disponibilidad y estabilidad",
-        ],
-      },
-      {
-        title: "Chequeo de seguridad IT y protección",
-        text:
-          "Análisis de vulnerabilidades e implantación de medidas de protección.",
-        details: [
-          "Auditorías de seguridad y pruebas de penetración",
-          "Conceptos de firewall, endpoint y backup",
-          "Aplicación de medidas técnicas y organizativas",
-        ],
-      },
-      {
-        title: "Instalación de software y actualizaciones",
-        text:
-          "Instalación profesional y actualizaciones regulares de su software.",
-        details: [
-          "Despliegues estandarizados de software",
-          "Planificación y ejecución de actualizaciones y upgrades",
-          "Documentación y estrategias de rollback",
-        ],
-      },
-      {
-        title: "Gestión de dispositivos móviles (MDM)",
-        text:
-          "Gestión segura de dispositivos móviles en su empresa.",
-        details: [
-          "Gestión centralizada de smartphones, tablets y portátiles",
-          "Aplicación de políticas de seguridad (PIN, cifrado)",
-          "Borrado remoto en caso de pérdida o robo",
-        ],
-      },
-      {
-        title: "Soluciones para teletrabajo",
-        text:
-          "Equipamiento eficiente y seguro para puestos de trabajo remotos.",
-        details: [
-          "Soluciones VPN y escritorio remoto",
-          "Integración de herramientas de colaboración (Teams, Zoom, etc.)",
-          "Conceptos de seguridad para trabajar desde casa",
-        ],
-      },
-      {
-        title: "Alquiler y modernización de IT",
-        text:
-          "Alquiler flexible de hardware y modernización estratégica.",
-        details: [
-          "Planificación de renovaciones de hardware y ciclo de vida",
-          "Modelos de alquiler para servidores, equipos y red",
-          "Modelos de costes transparentes en lugar de grandes inversiones únicas",
-        ],
-      },
-      {
-        title: "Telecomunicaciones (p. ej. VoIP)",
-        text:
-          "Soluciones de comunicación modernas para su empresa.",
-        details: [
-          "Configuración de centrales telefónicas VoIP",
-          "Conexión de sedes y trabajadores móviles",
-          "Integración con CRM y sistemas de tickets",
-        ],
-      },
-    ],
+    services: servicesEs,
     itCheck: {
       title: "Chequeo IT en 60 segundos",
       text:
@@ -668,11 +682,7 @@ const translations = {
       questions: [
         {
           question: "¿Qué antigüedad tienen sus servidores?",
-          answers: [
-            "Menos de 3 años",
-            "3–5 años",
-            "Más de 5 años / No lo sé",
-          ],
+          answers: ["Menos de 3 años", "3–5 años", "Más de 5 años / No lo sé"],
         },
         {
           question: "¿Con qué frecuencia se realizan copias de seguridad?",
@@ -707,8 +717,7 @@ const translations = {
       success: "¡Mensaje enviado! (Demo)",
     },
     footer: {
-      about:
-        "Servicios de TI para empresas: seguros, flexibles y eficientes.",
+      about: "Servicios de TI para empresas: seguros, flexibles y eficientes.",
       nav: "Navegación",
       legal: "Legal",
       contact: "Contacto",
@@ -717,8 +726,7 @@ const translations = {
       addressLine1: "managed4u",
       addressLine2: "Sevilla, España",
       email: "info@managed4u.de",
-      rights: (year) =>
-        `© ${year} managed4u – Todos los derechos reservados.`,
+      rights: (year) => `© ${year} managed4u – Todos los derechos reservados.`,
     },
     floating: {
       label: "¿Más información?",
@@ -743,7 +751,14 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
   return (
     <header className="nav">
       <div className="nav-inner">
-        <div className="nav-logo">{tNav.brand}</div>
+        <div className="nav-left">
+          <a href="#hero" className="brand">
+            <span className="brand-logo">
+              <img src={logo} alt="managed4u logo" className="nav-logo-img" />
+            </span>
+            <span className="brand-text">{tNav.brand}</span>
+          </a>
+        </div>
 
         <nav className="nav-links">
           {navItems.map((item) => (
@@ -759,9 +774,7 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
               <button
                 key={code}
                 type="button"
-                className={`lang-btn ${
-                  lang === code ? "lang-btn-active" : ""
-                }`}
+                className={`lang-btn ${lang === code ? "lang-btn-active" : ""}`}
                 onClick={() => setLang(code)}
               >
                 {translations[code].label}
@@ -794,8 +807,8 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
 function Intro({ tIntro, onGo }) {
   return (
     <section id="intro" className="intro">
-      <div className="intro-inner hover-zoom">
-        <div className="intro-logo">{tIntro.logo}</div>
+      <div className="intro-inner">
+        <img src={logo} alt="Managed4U Logo" className="intro-logo-img" />
         <p className="intro-tagline">{tIntro.tagline}</p>
 
         <div className="intro-highlights">
@@ -807,31 +820,16 @@ function Intro({ tIntro, onGo }) {
         </div>
 
         <div className="intro-actions">
-          <a
-            href="#hero"
-            className="intro-primary"
-            onClick={(e) => {
-              e.preventDefault();
-              onGo("hero");
-            }}
-          >
+          <button className="intro-primary" onClick={() => onGo("hero")} type="button">
             {tIntro.primary}
-          </a>
-          <a
-            href="#it-check"
-            className="intro-secondary"
-            onClick={(e) => {
-              e.preventDefault();
-              onGo("it-check");
-            }}
-          >
+          </button>
+          <button className="intro-secondary" onClick={() => onGo("it-check")} type="button">
             {tIntro.secondary}
-          </a>
+          </button>
         </div>
 
         <div className="intro-scroll-hint">
-          {tIntro.scroll}
-          <span className="intro-scroll-arrow">▾</span>
+          {tIntro.scroll} <span className="intro-scroll-arrow">▾</span>
         </div>
       </div>
     </section>
@@ -875,7 +873,7 @@ function AboutShort({ tAbout }) {
             ))}
           </ul>
         </div>
-        <div className="about-card hover-zoom">
+        <div className="about-card">
           <h3>{tAbout.cardTitle}</h3>
           <p>{tAbout.cardText}</p>
           <p className="about-highlight">
@@ -887,7 +885,7 @@ function AboutShort({ tAbout }) {
   );
 }
 
-/* ---------------- SERVICES WITH MODAL ---------------- */
+/* ---------------- SERVICES + MODAL ---------------- */
 
 function ServicesSection({ tServicesSection, services }) {
   const [activeService, setActiveService] = useState(null);
@@ -900,18 +898,19 @@ function ServicesSection({ tServicesSection, services }) {
 
         <div className="services-grid">
           {services.map((service) => (
-            <article key={service.title} className="service-card hover-zoom">
-              <div className="service-icon" />
+            <article key={service.title} className="service-card">
+              <div className="service-icon">{service.icon || "•"}</div>
               <div className="service-content">
                 <h3>{service.title}</h3>
                 <p>{service.text}</p>
               </div>
+
               <button
                 type="button"
                 className="link-button"
                 onClick={() => setActiveService(service)}
               >
-                {tServicesSection.more}
+                {tServicesSection.more} →
               </button>
             </article>
           ))}
@@ -919,23 +918,25 @@ function ServicesSection({ tServicesSection, services }) {
       </div>
 
       {activeService && (
-        <div
-          className="modal-backdrop"
-          onClick={() => setActiveService(null)}
-        >
+        <div className="modal-backdrop" onClick={() => setActiveService(null)} role="presentation">
           <div
-            className="modal-card hover-zoom"
+            className="modal-card"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
           >
             <button
               type="button"
               className="modal-close"
               onClick={() => setActiveService(null)}
+              aria-label="Close"
             >
               ×
             </button>
+
             <h3>{activeService.title}</h3>
             <p className="modal-intro">{activeService.text}</p>
+
             {activeService.details && (
               <ul className="modal-list">
                 {activeService.details.map((d) => (
@@ -943,19 +944,12 @@ function ServicesSection({ tServicesSection, services }) {
                 ))}
               </ul>
             )}
+
             <div className="modal-actions">
-              <a
-                href="#contact"
-                className="modal-primary"
-                onClick={() => setActiveService(null)}
-              >
+              <a href="#contact" className="modal-primary" onClick={() => setActiveService(null)}>
                 {tServicesSection.modalPrimary}
               </a>
-              <button
-                type="button"
-                className="modal-secondary"
-                onClick={() => setActiveService(null)}
-              >
+              <button type="button" className="modal-secondary" onClick={() => setActiveService(null)}>
                 {tServicesSection.modalSecondary}
               </button>
             </div>
@@ -975,21 +969,21 @@ function ITCheckTool({ tIt }) {
   return (
     <section id="it-check" className="section section-gray">
       <div className="section-inner">
-        <div className="it-card hover-zoom">
+        <div className="it-card">
           {!isFinished ? (
             <>
               <h2>{tIt.title}</h2>
               <p>{tIt.text}</p>
-              <div className="it-progress">
-                {tIt.progress(step + 1, tIt.questions.length)}
-              </div>
+              <div className="it-progress">{tIt.progress(step + 1, tIt.questions.length)}</div>
+
               <h3 className="it-question">{tIt.questions[step].question}</h3>
               <div className="it-answers">
                 {tIt.questions[step].answers.map((a) => (
                   <button
                     key={a}
+                    type="button"
                     className="it-answer-btn"
-                    onClick={() => setStep(step + 1)}
+                    onClick={() => setStep((s) => s + 1)}
                   >
                     {a}
                   </button>
@@ -1011,7 +1005,7 @@ function ITCheckTool({ tIt }) {
   );
 }
 
-/* ---------------- CONTACT + MAP ---------------- */
+/* ---------------- CONTACT ---------------- */
 
 function ContactSection({ tContact, services }) {
   return (
@@ -1022,7 +1016,7 @@ function ContactSection({ tContact, services }) {
 
         <div className="contact-layout">
           <form
-            className="contact-form hover-zoom"
+            className="contact-form"
             onSubmit={(e) => {
               e.preventDefault();
               alert(tContact.success);
@@ -1071,17 +1065,15 @@ function ContactSection({ tContact, services }) {
               <span>{tContact.consent}</span>
             </div>
 
-            <button className="hero-cta contact-submit">
+            <button className="hero-cta contact-submit" type="submit">
               {tContact.submit}
             </button>
           </form>
 
-          <div className="map-card hover-zoom">
-            <h3>Sevilla · Spanien</h3>
-            <p className="map-subtext">
-              Standort unserer IT-Dienstleistungen in Spanien.
-            </p>
-            <div id="map-container">
+          <div className="map-card">
+            <h3>Sevilla · Spain</h3>
+            <p className="map-subtext">Google Maps (embed)</p>
+            <div className="map-container">
               <iframe
                 title="Sevilla, Spain"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6376.584654001384!2d-5.9973367!3d37.3890924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126c1103fe7a8f%3A0x402af51b4664250!2sSeville%2C%20Spain!5e0!3m2!1sen!2sde!4v1700000000000"
@@ -1091,7 +1083,7 @@ function ContactSection({ tContact, services }) {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              />
             </div>
           </div>
         </div>
@@ -1113,7 +1105,7 @@ function Footer({ tFooter }) {
         </div>
         <div className="footer-col">
           <h4>{tFooter.nav}</h4>
-          <a href="#hero">Start</a>
+          <a href="#hero">Hero</a>
           <a href="#services">Services</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
@@ -1130,6 +1122,7 @@ function Footer({ tFooter }) {
           <p>{tFooter.email}</p>
         </div>
       </div>
+
       <div className="footer-bottom">
         <span className="footer-rights">{tFooter.rights(year)}</span>
         <span className="footer-credit">
@@ -1146,14 +1139,7 @@ function FloatingContact({ floating }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handler = () => {
-      const y =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
-      setVisible(y > 200);
-    };
+    const handler = () => setVisible((window.scrollY || 0) > 220);
     handler();
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
@@ -1162,9 +1148,7 @@ function FloatingContact({ floating }) {
   return (
     <a
       href="tel:+4915222907274"
-      className={`floating-contact ${
-        visible ? "floating-contact-visible" : ""
-      }`}
+      className={`floating-contact ${visible ? "floating-contact-visible" : ""}`}
     >
       <span className="floating-contact-label">{floating.label}</span>
       <span className="floating-contact-phone">{floating.phone}</span>
@@ -1180,7 +1164,7 @@ function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
       <div className={`mobile-menu ${isOpen ? "open" : ""}`}>
         <div className="mobile-menu-header">
           <span className="mobile-brand">{tNav.brand}</span>
-          <button className="mobile-close" onClick={onClose}>
+          <button className="mobile-close" onClick={onClose} type="button">
             ×
           </button>
         </div>
@@ -1190,9 +1174,7 @@ function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
             <button
               key={code}
               type="button"
-              className={`lang-btn ${
-                lang === code ? "lang-btn-active" : ""
-              }`}
+              className={`lang-btn ${lang === code ? "lang-btn-active" : ""}`}
               onClick={() => setLang(code)}
             >
               {translations[code].label}
@@ -1208,6 +1190,7 @@ function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
           ))}
         </nav>
       </div>
+
       {isOpen && <div className="mobile-backdrop" onClick={onClose} />}
     </>
   );
@@ -1224,19 +1207,18 @@ export default function App() {
 
   const goToSection = (id) => {
     setShowIntro(false);
+    setMobileMenuOpen(false);
     setTimeout(() => {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }, 80);
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (showIntro) {
-        goToSection("hero");
-      }
+      if (showIntro) goToSection("hero");
     }, 7000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showIntro]);
 
   return (
@@ -1262,10 +1244,7 @@ export default function App() {
         <>
           <Hero tHero={t.hero} />
           <AboutShort tAbout={t.about} />
-          <ServicesSection
-            tServicesSection={t.servicesSection}
-            services={t.services}
-          />
+          <ServicesSection tServicesSection={t.servicesSection} services={t.services} />
           <ITCheckTool tIt={t.itCheck} />
           <ContactSection tContact={t.contact} services={t.services} />
           <Footer tFooter={t.footer} />
