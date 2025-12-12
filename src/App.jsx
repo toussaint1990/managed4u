@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import logo from "./assets/logo.jpeg";
 
 /* ---------------- SERVICES DATA (defined FIRST to avoid TDZ error) ---------------- */
@@ -386,18 +386,6 @@ const translations = {
       itcheck: "IT-Check",
       cta: "Jetzt anfragen",
     },
-    intro: {
-      tagline:
-        "Moderne IT-Dienstleistungen für Unternehmen – managed, sicher und flexibel.",
-      badges: [
-        "🔐 IT-Sicherheit & Compliance",
-        "🖥️ Managed Services & Support",
-        "☁️ Cloud & Microsoft 365",
-      ],
-      primary: "Zur Website",
-      secondary: "IT-Check starten",
-      scroll: "Scrollen Sie nach unten",
-    },
     hero: {
       pill: "IT-Dienstleistungen für Unternehmen",
       title: "IT neu gedacht. Managed. Sicher. Flexibel.",
@@ -427,6 +415,7 @@ const translations = {
       more: "Mehr erfahren",
       modalPrimary: "Jetzt anfragen",
       modalSecondary: "Schließen",
+      pick: "Gewünschte Leistung auswählen",
     },
     services: servicesDe,
     itCheck: {
@@ -476,7 +465,7 @@ const translations = {
       interests: "Ich interessiere mich für:",
       messageLabel: "Ihre Nachricht",
       consent: "Ich stimme der Datenverarbeitung zu.",
-      submit: "Anfrage senden",
+      submit: "Jetzt Anfrage stellen",
       success: "Nachricht gesendet! (Demo)",
     },
     footer: {
@@ -509,18 +498,6 @@ const translations = {
       itcheck: "IT Check",
       cta: "Request now",
     },
-    intro: {
-      tagline:
-        "Modern IT services for businesses – managed, secure and flexible.",
-      badges: [
-        "🔐 IT Security & Compliance",
-        "🖥️ Managed Services & Support",
-        "☁️ Cloud & Microsoft 365",
-      ],
-      primary: "Go to website",
-      secondary: "Start IT check",
-      scroll: "Scroll down",
-    },
     hero: {
       pill: "IT services for businesses",
       title: "Rethinking IT. Managed. Secure. Flexible.",
@@ -550,6 +527,7 @@ const translations = {
       more: "Learn more",
       modalPrimary: "Request now",
       modalSecondary: "Close",
+      pick: "Select desired service",
     },
     services: servicesEn,
     itCheck: {
@@ -595,7 +573,7 @@ const translations = {
       interests: "I am interested in:",
       messageLabel: "Your message",
       consent: "I agree to the processing of my data.",
-      submit: "Send request",
+      submit: "Request now",
       success: "Message sent! (Demo)",
     },
     footer: {
@@ -627,18 +605,6 @@ const translations = {
       itcheck: "Chequeo IT",
       cta: "Solicitar ahora",
     },
-    intro: {
-      tagline:
-        "Servicios de TI modernos para empresas: gestionados, seguros y flexibles.",
-      badges: [
-        "🔐 Seguridad y cumplimiento IT",
-        "🖥️ Servicios gestionados y soporte",
-        "☁️ Cloud y Microsoft 365",
-      ],
-      primary: "Ir al sitio web",
-      secondary: "Iniciar chequeo IT",
-      scroll: "Desplácese hacia abajo",
-    },
     hero: {
       pill: "Servicios de TI para empresas",
       title: "Una nueva forma de pensar la TI. Gestionada. Segura. Flexible.",
@@ -668,6 +634,7 @@ const translations = {
       more: "Más información",
       modalPrimary: "Solicitar ahora",
       modalSecondary: "Cerrar",
+      pick: "Seleccione el servicio deseado",
     },
     services: servicesEs,
     itCheck: {
@@ -713,7 +680,7 @@ const translations = {
       interests: "Estoy interesado en:",
       messageLabel: "Su mensaje",
       consent: "Acepto el tratamiento de mis datos.",
-      submit: "Enviar solicitud",
+      submit: "Solicitar ahora",
       success: "¡Mensaje enviado! (Demo)",
     },
     footer: {
@@ -753,10 +720,18 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
       <div className="nav-inner">
         <div className="nav-left">
           <a href="#hero" className="brand">
-            <span className="brand-logo">
+            <span className="brand-logo brand-logo-orbit">
+              <div className="nav-orbit">
+                <span className="nav-orbit-icon n1">🔐</span>
+                <span className="nav-orbit-icon n2">☁️</span>
+                <span className="nav-orbit-icon n3">🛠️</span>
+                <span className="nav-orbit-icon n4">🌐</span>
+              </div>
               <img src={logo} alt="managed4u logo" className="nav-logo-img" />
             </span>
-            <span className="brand-text">{tNav.brand}</span>
+
+            {/* ✅ Removed white managed text in navbar */}
+            {/* <span className="brand-text">{tNav.brand}</span> */}
           </a>
         </div>
 
@@ -782,7 +757,7 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
             ))}
           </div>
 
-          <a href="#contact" className="nav-cta">
+          <a href="#contact" className="nav-cta blink">
             {tNav.cta}
           </a>
 
@@ -802,51 +777,35 @@ function Navbar({ tNav, lang, setLang, onToggleMenu }) {
   );
 }
 
-/* ---------------- INTRO ---------------- */
-
-function Intro({ tIntro, onGo }) {
-  return (
-    <section id="intro" className="intro">
-      <div className="intro-inner">
-        <img src={logo} alt="Managed4U Logo" className="intro-logo-img" />
-        <p className="intro-tagline">{tIntro.tagline}</p>
-
-        <div className="intro-highlights">
-          {tIntro.badges.map((b) => (
-            <div key={b} className="intro-badge">
-              {b}
-            </div>
-          ))}
-        </div>
-
-        <div className="intro-actions">
-          <button className="intro-primary" onClick={() => onGo("hero")} type="button">
-            {tIntro.primary}
-          </button>
-          <button className="intro-secondary" onClick={() => onGo("it-check")} type="button">
-            {tIntro.secondary}
-          </button>
-        </div>
-
-        <div className="intro-scroll-hint">
-          {tIntro.scroll} <span className="intro-scroll-arrow">▾</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ---------------- HERO ---------------- */
 
 function Hero({ tHero }) {
   return (
     <section id="hero" className="hero">
       <div className="hero-inner">
-        <span className="hero-pill">{tHero.pill}</span>
+        {/* ✅ pill blinking green */}
+        <span className="hero-pill blink-green">{tHero.pill}</span>
+
+        <div className="hero-logo-wrap">
+          <div className="orbit">
+            <span className="orbit-icon i1">🔐</span>
+            <span className="orbit-icon i2">☁️</span>
+            <span className="orbit-icon i3">🛠️</span>
+            <span className="orbit-icon i4">🌐</span>
+            <span className="orbit-icon i5">🧩</span>
+            <span className="orbit-icon i6">💻</span>
+          </div>
+
+          <div className="hero-logo-core">
+            <img src={logo} alt="managed4u logo" className="hero-logo-img" />
+          </div>
+        </div>
+
         <h1>{tHero.title}</h1>
         <p>{tHero.text}</p>
+
         <div className="hero-actions">
-          <a href="#contact" className="hero-cta">
+          <a href="#contact" className="hero-cta blink">
             {tHero.primary}
           </a>
           <a href="#it-check" className="hero-ghost">
@@ -873,7 +832,7 @@ function AboutShort({ tAbout }) {
             ))}
           </ul>
         </div>
-        <div className="about-card">
+        <div className="about-card hover-zoom">
           <h3>{tAbout.cardTitle}</h3>
           <p>{tAbout.cardText}</p>
           <p className="about-highlight">
@@ -887,8 +846,22 @@ function AboutShort({ tAbout }) {
 
 /* ---------------- SERVICES + MODAL ---------------- */
 
-function ServicesSection({ tServicesSection, services }) {
+function ServicesSection({
+  tServicesSection,
+  services,
+  selectedTitles,
+  setSelectedTitles,
+}) {
   const [activeService, setActiveService] = useState(null);
+
+  const toggleService = (title) => {
+    setSelectedTitles((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
+      return next;
+    });
+  };
 
   return (
     <section id="services" className="section section-light">
@@ -897,28 +870,49 @@ function ServicesSection({ tServicesSection, services }) {
         <p className="section-subtitle">{tServicesSection.subtitle}</p>
 
         <div className="services-grid">
-          {services.map((service) => (
-            <article key={service.title} className="service-card">
-              <div className="service-icon">{service.icon || "•"}</div>
-              <div className="service-content">
-                <h3>{service.title}</h3>
-                <p>{service.text}</p>
-              </div>
+          {services.map((service) => {
+            const checked = selectedTitles.has(service.title);
+            return (
+              <article key={service.title} className="service-card hover-zoom">
+                <div className="service-top">
+                  <div className="service-icon">{service.icon || "•"}</div>
 
-              <button
-                type="button"
-                className="link-button"
-                onClick={() => setActiveService(service)}
-              >
-                {tServicesSection.more} →
-              </button>
-            </article>
-          ))}
+                  <label className="service-pick" title={tServicesSection.pick}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleService(service.title)}
+                    />
+                    <span className="service-pick-label">
+                      {tServicesSection.pick}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="service-content">
+                  <h3>{service.title}</h3>
+                  <p>{service.text}</p>
+                </div>
+
+                <button
+                  type="button"
+                  className="link-button"
+                  onClick={() => setActiveService(service)}
+                >
+                  {tServicesSection.more} →
+                </button>
+              </article>
+            );
+          })}
         </div>
       </div>
 
       {activeService && (
-        <div className="modal-backdrop" onClick={() => setActiveService(null)} role="presentation">
+        <div
+          className="modal-backdrop"
+          onClick={() => setActiveService(null)}
+          role="presentation"
+        >
           <div
             className="modal-card"
             onClick={(e) => e.stopPropagation()}
@@ -946,10 +940,18 @@ function ServicesSection({ tServicesSection, services }) {
             )}
 
             <div className="modal-actions">
-              <a href="#contact" className="modal-primary" onClick={() => setActiveService(null)}>
+              <a
+                href="#contact"
+                className="modal-primary blink"
+                onClick={() => setActiveService(null)}
+              >
                 {tServicesSection.modalPrimary}
               </a>
-              <button type="button" className="modal-secondary" onClick={() => setActiveService(null)}>
+              <button
+                type="button"
+                className="modal-secondary"
+                onClick={() => setActiveService(null)}
+              >
                 {tServicesSection.modalSecondary}
               </button>
             </div>
@@ -969,12 +971,14 @@ function ITCheckTool({ tIt }) {
   return (
     <section id="it-check" className="section section-gray">
       <div className="section-inner">
-        <div className="it-card">
+        <div className="it-card hover-zoom">
           {!isFinished ? (
             <>
               <h2>{tIt.title}</h2>
               <p>{tIt.text}</p>
-              <div className="it-progress">{tIt.progress(step + 1, tIt.questions.length)}</div>
+              <div className="it-progress">
+                {tIt.progress(step + 1, tIt.questions.length)}
+              </div>
 
               <h3 className="it-question">{tIt.questions[step].question}</h3>
               <div className="it-answers">
@@ -982,7 +986,7 @@ function ITCheckTool({ tIt }) {
                   <button
                     key={a}
                     type="button"
-                    className="it-answer-btn"
+                    className="it-answer-btn hover-zoom"
                     onClick={() => setStep((s) => s + 1)}
                   >
                     {a}
@@ -994,7 +998,7 @@ function ITCheckTool({ tIt }) {
             <>
               <h2>{tIt.thanksTitle}</h2>
               <p>{tIt.thanksText}</p>
-              <a className="hero-cta" href="#contact">
+              <a className="hero-cta blink" href="#contact">
                 {tIt.contactBtn}
               </a>
             </>
@@ -1007,7 +1011,21 @@ function ITCheckTool({ tIt }) {
 
 /* ---------------- CONTACT ---------------- */
 
-function ContactSection({ tContact, services }) {
+function ContactSection({
+  tContact,
+  services,
+  selectedTitles,
+  setSelectedTitles,
+}) {
+  const toggleService = (title) => {
+    setSelectedTitles((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
+      return next;
+    });
+  };
+
   return (
     <section id="contact" className="section section-gray">
       <div className="section-inner">
@@ -1016,7 +1034,7 @@ function ContactSection({ tContact, services }) {
 
         <div className="contact-layout">
           <form
-            className="contact-form"
+            className="contact-form hover-zoom"
             onSubmit={(e) => {
               e.preventDefault();
               alert(tContact.success);
@@ -1048,8 +1066,13 @@ function ContactSection({ tContact, services }) {
               <label>{tContact.interests}</label>
               <div className="checkbox-grid">
                 {services.map((s) => (
-                  <label key={s.title} className="checkbox-item">
-                    <input type="checkbox" /> {s.title}
+                  <label key={s.title} className="checkbox-item hover-zoom">
+                    <input
+                      type="checkbox"
+                      checked={selectedTitles.has(s.title)}
+                      onChange={() => toggleService(s.title)}
+                    />{" "}
+                    {s.title}
                   </label>
                 ))}
               </div>
@@ -1065,12 +1088,12 @@ function ContactSection({ tContact, services }) {
               <span>{tContact.consent}</span>
             </div>
 
-            <button className="hero-cta contact-submit" type="submit">
+            <button className="hero-cta contact-submit blink" type="submit">
               {tContact.submit}
             </button>
           </form>
 
-          <div className="map-card">
+          <div className="map-card hover-zoom">
             <h3>Sevilla · Spain</h3>
             <p className="map-subtext">Google Maps (embed)</p>
             <div className="map-container">
@@ -1133,7 +1156,7 @@ function Footer({ tFooter }) {
   );
 }
 
-/* ---------------- FLOATING CONTACT ---------------- */
+/* ---------------- FLOATING CONTACT (original) ---------------- */
 
 function FloatingContact({ floating }) {
   const [visible, setVisible] = useState(false);
@@ -1152,6 +1175,30 @@ function FloatingContact({ floating }) {
     >
       <span className="floating-contact-label">{floating.label}</span>
       <span className="floating-contact-phone">{floating.phone}</span>
+    </a>
+  );
+}
+
+/* ---------------- SLIDE CALL BUTTON ---------------- */
+
+function SlideCallButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setVisible((window.scrollY || 0) > 220);
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  return (
+    <a
+      href="tel:+4915222907274"
+      className={`slide-call ${visible ? "slide-call-visible" : ""}`}
+      aria-label="Call now +49 1522 2907274"
+    >
+      <span className="slide-call-text">Call now</span>
+      <span className="slide-call-phone">+49 1522 2907274</span>
     </a>
   );
 }
@@ -1200,26 +1247,17 @@ function MobileMenu({ tNav, isOpen, onClose, setLang, lang }) {
 
 export default function App() {
   const [lang, setLang] = useState("de");
-  const [showIntro, setShowIntro] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const t = translations[lang];
 
-  const goToSection = (id) => {
-    setShowIntro(false);
-    setMobileMenuOpen(false);
-    setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }, 80);
-  };
+  const [selectedTitles, setSelectedTitles] = useState(() => new Set());
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (showIntro) goToSection("hero");
-    }, 7000);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showIntro]);
+    setSelectedTitles(new Set());
+  }, [lang]);
+
+  const services = useMemo(() => t.services, [t.services]);
 
   return (
     <>
@@ -1238,20 +1276,29 @@ export default function App() {
         lang={lang}
       />
 
-      {showIntro ? (
-        <Intro tIntro={t.intro} onGo={goToSection} />
-      ) : (
-        <>
-          <Hero tHero={t.hero} />
-          <AboutShort tAbout={t.about} />
-          <ServicesSection tServicesSection={t.servicesSection} services={t.services} />
-          <ITCheckTool tIt={t.itCheck} />
-          <ContactSection tContact={t.contact} services={t.services} />
-          <Footer tFooter={t.footer} />
-        </>
-      )}
+      <Hero tHero={t.hero} />
+      <AboutShort tAbout={t.about} />
+
+      <ServicesSection
+        tServicesSection={t.servicesSection}
+        services={services}
+        selectedTitles={selectedTitles}
+        setSelectedTitles={setSelectedTitles}
+      />
+
+      <ITCheckTool tIt={t.itCheck} />
+
+      <ContactSection
+        tContact={t.contact}
+        services={services}
+        selectedTitles={selectedTitles}
+        setSelectedTitles={setSelectedTitles}
+      />
+
+      <Footer tFooter={t.footer} />
 
       <FloatingContact floating={t.floating} />
+      <SlideCallButton />
     </>
   );
 }
